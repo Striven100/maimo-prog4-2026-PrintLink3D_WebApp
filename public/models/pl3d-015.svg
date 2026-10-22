@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17262E"/><stop offset="1" stop-color="#101A20"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="22"/></filter></defs>
+<rect width="900" height="560" fill="url(#bg)"/><circle cx="180" cy="80" r="130" fill="#20D6C7" opacity=".12" filter="url(#glow)"/><circle cx="760" cy="120" r="150" fill="#82F6A7" opacity=".10" filter="url(#glow)"/>
+<g><path d="M245 275h410v120H245z" rx="24" fill="#20D6C7" opacity=".85"/><path d="M330 185h240v90H330z" fill="none" stroke="#82F6A7" stroke-width="28" stroke-linejoin="round"/></g>
+<text x="58" y="72" fill="#F5F7F3" font-family="Arial, sans-serif" font-size="24" font-weight="700">Oficina</text>
+<text x="58" y="500" fill="#F5F7F3" font-family="Arial, sans-serif" font-size="34" font-weight="800">Soporte para cámara web</text>
+<text x="58" y="535" fill="#7A878C" font-family="Arial, sans-serif" font-size="21">PLA · 88 g · 4.2 h</text>
+</svg>

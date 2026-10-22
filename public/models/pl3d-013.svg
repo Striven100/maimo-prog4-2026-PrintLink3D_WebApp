@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17262E"/><stop offset="1" stop-color="#101A20"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="22"/></filter></defs>
+<rect width="900" height="560" fill="url(#bg)"/><circle cx="180" cy="80" r="130" fill="#B8FFF8" opacity=".12" filter="url(#glow)"/><circle cx="760" cy="120" r="150" fill="#20D6C7" opacity=".10" filter="url(#glow)"/>
+<g><path d="M310 360V220l140-80 140 80v140l-140 80z" fill="none" stroke="#B8FFF8" stroke-width="30" stroke-linejoin="round"/><path d="M310 220l140 80 140-80M450 300v140" stroke="#20D6C7" stroke-width="22" fill="none"/></g>
+<text x="58" y="72" fill="#F5F7F3" font-family="Arial, sans-serif" font-size="24" font-weight="700">Repuestos</text>
+<text x="58" y="500" fill="#F5F7F3" font-family="Arial, sans-serif" font-size="34" font-weight="800">Repuesto de perilla estriada</text>
+<text x="58" y="535" fill="#7A878C" font-family="Arial, sans-serif" font-size="21">PETG · 38 g · 2.0 h</text>
+</svg>

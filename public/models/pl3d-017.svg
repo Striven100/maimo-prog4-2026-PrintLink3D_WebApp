@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17262E"/><stop offset="1" stop-color="#101A20"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="22"/></filter></defs>
+<rect width="900" height="560" fill="url(#bg)"/><circle cx="180" cy="80" r="130" fill="#82F6A7" opacity=".12" filter="url(#glow)"/><circle cx="760" cy="120" r="150" fill="#FFC2A7" opacity=".10" filter="url(#glow)"/>
+<g><circle cx="450" cy="285" r="120" fill="#82F6A7" opacity=".78"/><path d="M365 285h170M450 200v170" stroke="#FFC2A7" stroke-width="26" stroke-linecap="round"/></g>
+<text x="58" y="72" fill="#F5F7F3" font-family="Arial, sans-serif" font-size="24" font-weight="700">Arte</text>
+<text x="58" y="500" fill="#F5F7F3" font-family="Arial, sans-serif" font-size="34" font-weight="800">Mini busto clásico</text>
+<text x="58" y="535" fill="#7A878C" font-family="Arial, sans-serif" font-size="21">Resina · 95 g · 7.0 h</text>
+</svg>
