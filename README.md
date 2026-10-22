@@ -1,45 +1,69 @@
-# PrintLink 3D — versión funcional con Firebase
+# PrintLink 3D — versión local funcional
 
-Plataforma web para conectar personas que necesitan una impresión 3D con talleres/impresores capaces de producirla.
+Plataforma web para conectar solicitudes de impresión 3D con talleres/impresores.
 
-## Qué cambia respecto del MVP
+Esta versión **no usa Firebase ni una base de datos externa**. Las cuentas y todos los datos creados en la aplicación se guardan localmente en el navegador.
 
-- Ya no existe un selector artificial de “modo cliente / trabajador”.
-- Cada persona crea una cuenta con **email y contraseña** usando Firebase Authentication.
-- El rol se elige una vez durante el registro: `client` o `worker`.
-- Los trabajos, propuestas, guardados, perfiles, portfolio y mensajes viven en Cloud Firestore.
-- El chat es persistente y usa listeners en tiempo real.
-- La API local incluye 20 modelos 3D con imágenes SVG propias, peso, tiempo, material y precio orientativo.
-- Diseño responsive con rutas separadas y navegación específica según el tipo de cuenta.
+## Qué funciona
 
-## Funciones principales
+### Cuentas
 
-### Cuenta cliente
+- Registro con email y contraseña.
+- Elección de tipo de cuenta al registrarse: cliente o taller/impresor.
+- Login y logout.
+- Perfil editable.
+- Contraseña almacenada como hash local con salt, no como texto plano.
+- Sesión independiente por pestaña mediante `sessionStorage`.
 
-- Crear cuenta e iniciar sesión.
-- Explorar modelos 3D.
-- Abrir ficha técnica de un modelo.
+### Cliente
+
+- Explorar 20 modelos 3D.
+- Abrir ficha técnica y estimación.
 - Publicar una solicitud desde un modelo o desde cero.
 - Ver sus solicitudes.
-- Recibir propuestas de talleres.
-- Comparar propuestas.
+- Recibir y comparar propuestas.
 - Aceptar una propuesta.
-- Abrir chat privado con el taller elegido.
-- Recuperar contraseña por email.
-- Editar datos del perfil.
+- Abrir el chat del trabajo aceptado.
+- Explorar talleres.
 
-### Cuenta taller / impresor
+### Taller / impresor
 
-- Crear cuenta e iniciar sesión.
 - Ver trabajos abiertos.
-- Guardar trabajos para revisar después.
-- Enviar una propuesta con precio, material, entrega y notas.
-- Ver el estado de sus propuestas.
-- Recibir el trabajo cuando el cliente acepta.
-- Usar el chat del trabajo.
-- Actualizar el estado del trabajo aceptado.
-- Crear un portfolio persistente.
-- Editar ubicación, materiales y tarifas base.
+- Guardar trabajos.
+- Enviar una propuesta.
+- Consultar propuestas enviadas.
+- Ver trabajos aceptados.
+- Cambiar el estado del trabajo.
+- Usar el chat.
+- Crear y editar un portfolio.
+- Configurar materiales y tarifas base.
+
+## Cómo se guardan los datos
+
+La aplicación usa:
+
+- `localStorage`: cuentas, perfiles, trabajos, propuestas, guardados, conversaciones, mensajes y portfolio.
+- `sessionStorage`: usuario actualmente logueado en cada pestaña.
+
+Esto permite abrir dos pestañas del mismo dominio y usar una cuenta distinta en cada una. Por ejemplo:
+
+- Pestaña A: cliente.
+- Pestaña B: taller.
+
+Ambas pestañas comparten los trabajos y mensajes locales, pero mantienen sesiones distintas.
+
+## Importante
+
+Los datos existen **solo en ese navegador y para ese dominio**.
+
+Por lo tanto:
+
+- Si borrás los datos del navegador, se eliminan las cuentas y trabajos.
+- Otro dispositivo no puede ver esos datos.
+- Otro navegador no comparte los datos.
+- Esta autenticación sirve para demostración y pruebas, no para producción con información sensible.
+
+Para una plataforma pública multiusuario real será necesario conectar una base de datos y autenticación de servidor.
 
 ## Tecnologías
 
@@ -47,26 +71,14 @@ Plataforma web para conectar personas que necesitan una impresión 3D con taller
 - React 18
 - TypeScript
 - Tailwind CSS
-- Firebase Authentication
-- Cloud Firestore
-- Firebase Security Rules
+- Web Storage API
+- Web Crypto API
 - Vercel
 
 ## Ejecutar localmente
 
-### 1. Configurar Firebase
-
-Leé `FIREBASE_SETUP.md` y completá `.env.local`.
-
-### 2. Instalar
-
 ```bash
 npm install
-```
-
-### 3. Ejecutar
-
-```bash
 npm run dev
 ```
 
@@ -76,20 +88,20 @@ Abrí:
 http://localhost:3000
 ```
 
+No necesitás crear `.env.local` ni configurar servicios externos.
+
 ## Probar el flujo completo
 
-Usá dos emails distintos.
-
-1. Registrá una cuenta como cliente.
-2. Registrá otra como taller/impresor.
-3. Cliente: abrí Modelos 3D y elegí uno.
-4. Cliente: publicá una solicitud.
-5. Taller: abrí Trabajos y guardá la solicitud.
-6. Taller: abrí el trabajo y enviá una propuesta.
-7. Cliente: abrí la solicitud y aceptá la propuesta.
-8. Cliente y taller: abrí Mensajes y escribí desde ambas cuentas.
-9. Taller: agregá trabajos al Portfolio.
-10. Recargá el navegador para comprobar que Firestore mantiene la información.
+1. Abrí la app.
+2. Registrá una cuenta como cliente.
+3. Abrí una segunda pestaña del mismo sitio.
+4. Cerrá la sesión de esa segunda pestaña si heredó alguna navegación inicial y registrá una segunda cuenta como taller.
+5. Cliente: publicá una solicitud.
+6. Taller: abrí Trabajos, guardá la solicitud y enviá una propuesta.
+7. Cliente: aceptá la propuesta.
+8. Abrí Mensajes desde ambas pestañas.
+9. Enviá mensajes desde las dos cuentas.
+10. Recargá las páginas para verificar que los datos persisten.
 
 ## API de modelos
 
@@ -124,34 +136,8 @@ Cotizador:
 /api/quote?weightGrams=125&gramPrice=250&printHours=8&hourPrice=700&extras=1500&platformFeePercent=12
 ```
 
-## Datos persistentes
-
-GitHub contiene el **código fuente**. Los datos creados por usuarios no se escriben dentro del repositorio.
-
-Cloud Firestore guarda:
-
-- `users`
-- `jobs`
-- `offers`
-- `savedJobs`
-- `conversations`
-- `conversations/{id}/messages`
-- `portfolioItems`
-
-Esto permite que los datos persistan tanto en localhost como en Vercel.
-
-## Seguridad
-
-El proyecto incluye `firestore.rules`.
-
-No publiques `.env.local` ni archivos de service account.
-
-Para desplegar las reglas:
-
-```bash
-firebase deploy --only firestore:rules,firestore:indexes
-```
-
 ## GitHub y Vercel
 
-Leé `GITHUB_VERCEL.md` para el procedimiento completo.
+Leé `GITHUB_VERCEL.md`.
+
+No hay variables de entorno obligatorias para esta versión.

@@ -1,91 +1,47 @@
-# Subir PrintLink 3D a GitHub y Vercel
+# GitHub y Vercel — PrintLink 3D local
 
-## Parte A — GitHub
+## GitHub
 
-### 1. Crear repositorio
+El proyecto ya está preparado para alojarse directamente en GitHub.
 
-En GitHub creá un repositorio vacío, por ejemplo:
-
-```txt
-printlink3d
-```
-
-No hace falta que GitHub agregue README o `.gitignore`, porque el proyecto ya los incluye.
-
-### 2. Abrir la terminal de VS Code
-
-Parado en la carpeta del proyecto:
+Si trabajás desde una copia local:
 
 ```bash
-git init
 git add .
-git commit -m "feat: PrintLink 3D funcional con Firebase"
-git branch -M main
-git remote add origin https://github.com/TU_USUARIO/printlink3d.git
-git push -u origin main
+git commit -m "feat: autenticacion y datos locales"
+git push origin main
 ```
 
-### 3. No subir `.env.local`
-
-`.gitignore` ya excluye `.env.local`.
-
-Nunca subas contraseñas, claves privadas ni archivos de service account al repositorio.
-
----
-
-## Parte B — Vercel
-
-### 1. Importar el repositorio
+## Vercel
 
 1. Entrá a Vercel.
-2. Elegí **Add New → Project**.
-3. Importá tu repositorio de GitHub.
-4. Vercel debería detectar **Next.js** automáticamente.
-5. Dejá los comandos de build por defecto.
+2. Importá el repositorio de GitHub.
+3. Vercel detectará Next.js automáticamente.
+4. No agregues variables de Firebase.
+5. No necesitás configurar una base de datos.
+6. Hacé Deploy.
 
-### 2. Agregar variables de entorno
+Cada push posterior a `main` puede disparar un nuevo deployment automáticamente.
 
-En el proyecto de Vercel:
+## Datos locales en Vercel
 
-**Settings → Environment Variables**
+Vercel solamente publica el código de la aplicación.
 
-Agregá las seis variables del archivo `.env.example`:
+Los datos de usuarios se guardan dentro del navegador de cada visitante usando Web Storage. Vercel no almacena:
 
-```txt
-NEXT_PUBLIC_FIREBASE_API_KEY
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-NEXT_PUBLIC_FIREBASE_PROJECT_ID
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
-NEXT_PUBLIC_FIREBASE_APP_ID
-```
+- cuentas,
+- contraseñas,
+- trabajos,
+- propuestas,
+- conversaciones,
+- portfolio.
 
-Usá los mismos valores de tu `.env.local`.
+Esto significa que dos personas en dispositivos distintos **no comparten información**.
 
-Aplicá las variables a Production y, si querés probar branches, también a Preview.
+Para demostrar el flujo con dos usuarios, usá dos pestañas del mismo navegador. La base local es compartida entre las pestañas y la sesión es independiente en cada una.
 
-### 3. Deploy
+## Variables de entorno
 
-Hacé Deploy o Redeploy después de agregar las variables.
+No son necesarias.
 
-Después, cada push a `main` volverá a desplegar la versión de producción automáticamente si mantenés la integración GitHub ↔ Vercel.
-
----
-
-## Parte C — Firebase en producción
-
-No tenés que mover los datos a Vercel. Vercel sirve la aplicación Next.js y los usuarios se conectan directamente al proyecto Firebase configurado.
-
-Asegurate de haber desplegado `firestore.rules` antes de compartir la aplicación públicamente.
-
-## Flujo de verificación final
-
-Después de publicar:
-
-1. Registrá una cuenta cliente.
-2. Registrá una segunda cuenta como taller.
-3. Cliente: publicar solicitud.
-4. Taller: guardar trabajo y enviar propuesta.
-5. Cliente: aceptar propuesta.
-6. Ambas cuentas: probar el chat.
-7. Recargar la página y comprobar que la información siga ahí.
+El archivo `.env.example` contiene solamente un nombre opcional de la aplicación.

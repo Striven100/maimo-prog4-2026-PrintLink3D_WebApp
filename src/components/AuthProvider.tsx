@@ -1,13 +1,12 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { onAuthStateChanged, type User } from "firebase/auth";
-import { auth, isFirebaseConfigured } from "@/lib/firebase";
+import { getCurrentUser, subscribeAuth, type LocalUser } from "@/lib/auth";
 import { getUserProfile } from "@/lib/firestore";
 import type { UserProfile } from "@/types";
 
 type AuthContextValue = {
-  user: User | null;
+  user: LocalUser | null;
   profile: UserProfile | null;
   loading: boolean;
   configured: boolean;
@@ -17,42 +16,35 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<LocalUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  async function loadProfile(currentUser: User | null) {
+  async function loadProfile(currentUser: LocalUser | null) {
     if (!currentUser) {
       setProfile(null);
       return;
     }
-    try {
-      setProfile(await getUserProfile(currentUser.uid));
-    } catch {
-      setProfile(null);
-    }
+    setProfile(await getUserProfile(currentUser.uid));
   }
 
   useEffect(() => {
-    if (!auth) {
-      setLoading(false);
-      return;
-    }
+    const initialUser = getCurrentUser();
+    setUser(initialUser);
+    loadProfile(initialUser).finally(() => setLoading(false));
 
-    const unsubscribe = onAuthStateChanged(auth, async (nextUser) => {
+    return subscribeAuth(async (nextUser) => {
       setUser(nextUser);
       await loadProfile(nextUser);
       setLoading(false);
     });
-
-    return unsubscribe;
   }, []);
 
   const value = useMemo<AuthContextValue>(() => ({
     user,
     profile,
     loading,
-    configured: isFirebaseConfigured,
+    configured: true,
     refreshProfile: async () => loadProfile(user),
   }), [user, profile, loading]);
 
