@@ -19,7 +19,7 @@ export default function NewJobPage() {
   const model = useMemo(() => models.find(item => item.id === searchParams.get("model")), [searchParams]);
   const [title, setTitle] = useState(model?.name || "");
   const [description, setDescription] = useState(model ? `Quiero imprimir ${model.name}. Necesito confirmar terminación y entrega.` : "");
-  const [material, setMaterial] = useState(model?.material || "PLA");
+  const [material, setMaterial] = useState<string>(model?.material || "PLA");
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("A definir");
   const [deliveryMethod, setDeliveryMethod] = useState("A coordinar");
