@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +12,7 @@ import { models } from "@/data/models";
 import { createJob } from "@/lib/firestore";
 import { formatMoney } from "@/lib/pricing";
 
-export default function NewJobPage() {
+function NewJobForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, profile } = useAuth();
@@ -78,5 +78,20 @@ export default function NewJobPage() {
         </div>
       </div>
     </AppShell>
+  );
+}
+
+
+export default function NewJobPage() {
+  return (
+    <Suspense fallback={
+      <AppShell>
+        <div className="grid min-h-64 place-items-center text-paper/50">
+          Cargando formulario…
+        </div>
+      </AppShell>
+    }>
+      <NewJobForm />
+    </Suspense>
   );
 }
